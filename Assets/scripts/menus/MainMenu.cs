@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject menu, helpMenu;
+    
     /// <summary>
     /// Handles the on click event from the play button
     /// </summary>
@@ -22,5 +24,17 @@ public class MainMenu : MonoBehaviour
     public void HandleQuitButtonOnClickEvent()
     {
         Application.Quit();
+    }
+
+    public void ToHelpMenu()
+    {
+        menu.SetActive(false);
+        helpMenu.SetActive(true);
+    }
+    
+    public void ReturnToMenu()
+    {
+        menu.SetActive(true);
+        helpMenu.SetActive(false);
     }
 }

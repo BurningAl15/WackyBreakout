@@ -37,6 +37,10 @@ public class Timer : MonoBehaviour
 				totalSeconds = value;
 			}
 		}
+		get
+		{
+			return totalSeconds;
+		}
 	}
 	
 	/// <summary>
@@ -58,7 +62,7 @@ public class Timer : MonoBehaviour
 		get { return running; }
 	}
 
-    #endregion
+	#endregion
 
     #region Methods
 
@@ -94,6 +98,17 @@ public class Timer : MonoBehaviour
 			running = true;
             elapsedSeconds = 0;
 		}
+	}
+	
+	public void Stop()
+	{
+		started = false;
+		running = false;
+	}
+
+	public void AddDurationTime(float timeAdded)
+	{
+		totalSeconds += timeAdded;
 	}
 	
 	#endregion

@@ -14,14 +14,15 @@ public class Paddle : MonoBehaviour
     private Vector2 skinSize;
 
     private static bool isFrozen = false;
-    private static float freezeDuration = 0;
-
-    private static Timer timer;
+    private static bool isSpeedUp = false;
+    private static int speedMultiplier = 1;
     
-    // public static bool IsFrozen
-    // {
-    //     set => isFrozen = value;
-    // }
+    private static float freezeDuration = 0;
+    private static float speedUpDuration = 0;
+
+    private static Timer freezeTimer;
+    private static Timer speedUpTimer;
+    
 
     public static float FreezeDuration
     {
@@ -29,25 +30,75 @@ public class Paddle : MonoBehaviour
         {
             isFrozen = true;
             freezeDuration = value;
-            timer.Duration = freezeDuration;
-            timer.Run();            
+            freezeTimer.Duration = freezeDuration;
+            freezeTimer.Run();      
         }
+    }
+
+    public static void SpeedUpDuration(int _speedMultiplier,float _duration)
+    {
+        isSpeedUp = true;
+        speedMultiplier = _speedMultiplier;
+        speedUpDuration = _duration;
+        if (speedUpTimer.Duration > 0)
+        {
+            speedUpTimer.AddDurationTime(speedUpDuration);
+        }
+        else
+        {
+            speedUpTimer.Duration = speedUpDuration;
+        }
+        speedUpTimer.Run();
     }
 
     void Start()
     {
         rgb = GetComponent<Rigidbody2D>();
-        timer = gameObject.AddComponent<Timer>();
+        
+        freezeTimer = gameObject.AddComponent<Timer>();
+        speedUpTimer = gameObject.AddComponent<Timer>();
+        
         skinSize = new Vector2(1f, .25f);
             halfColliderWidth = GetComponent<BoxCollider2D>().size.x;
             
     }
 
-    //This method is called 50 times per second
     void FixedUpdate()
     {
-        if (timer.Finished)
+        if (freezeTimer.Running)
+        {
+            if (speedUpTimer.Duration > 0)
+            {
+                speedUpTimer.Stop();
+            }
+        }
+        if (speedUpTimer.Running)
+        {
+            if (freezeTimer.Duration > 0)
+            {
+                freezeTimer.Stop();
+            }
+        }
+
+        if (freezeTimer.Finished)
+        {
+            if (speedUpTimer.Duration > 0)
+            {
+                speedUpTimer.Run();
+            }
             isFrozen = false;
+        }
+        if (speedUpTimer.Finished)
+        {
+            if (freezeTimer.Duration > 0)
+            {
+                freezeTimer.Run();
+            }
+            
+            speedMultiplier = 1;
+            Ball.SpeedUpDuration(1,0);
+            isSpeedUp = false;
+        }
         
         if(!isFrozen)
             Move();
@@ -56,7 +107,7 @@ public class Paddle : MonoBehaviour
     void Move()
     {
         Vector2 movePaddle=new Vector2(Input.GetAxis("Horizontal"),0);
-        Vector2 process = rgb.position + movePaddle * ConfigurationUtils.PaddleMoveUnitsPerSecond*Time.deltaTime;
+        Vector2 process = rgb.position + movePaddle * ConfigurationUtils.PaddleMoveUnitsPerSecond * speedMultiplier * Time.deltaTime;
         
         rgb.MovePosition(new Vector2(CalculateClampedX(process.x),process.y));
     }

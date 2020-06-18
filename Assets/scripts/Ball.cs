@@ -18,11 +18,26 @@ public class Ball : MonoBehaviour
     private Coroutine currentCoroutine = null;
     private bool startWorking = false;
 
+    private static int speedMultiplier = 1;
+    private static float speedUpDuration = 0;
+    private static Timer speedUpTimer;
+
+    private static bool changeSpeed = false;
+    
+    public static void SpeedUpDuration(int _speedMultiplier,float _duration)
+    {
+        speedMultiplier = _speedMultiplier;
+        speedUpDuration = _duration;
+        changeSpeed = true;
+    }
+    
     private void Start()
     {
         timer = gameObject.AddComponent<Timer>();
         rgb = GetComponent<Rigidbody2D>();
 
+        speedUpTimer = gameObject.AddComponent<Timer>();
+        
         if (currentCoroutine == null)
             currentCoroutine = StartCoroutine(StartBallMovement(1));
     }
@@ -31,6 +46,15 @@ public class Ball : MonoBehaviour
     {
         if (startWorking)
         {
+            if (changeSpeed)
+            {
+                Vector2 direction = new Vector2(
+                    Mathf.Cos(_angle), Mathf.Sin(_angle));
+
+                rgb.velocity = direction * speedMultiplier * ConfigurationUtils.BallImpulseForce * Time.deltaTime;
+                changeSpeed = false;
+            }
+            
             if (timer.Running)
             {
                 lastFrameVelocity = rgb.velocity;
@@ -43,13 +67,13 @@ public class Ball : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if(!other.gameObject.CompareTag("End"))
             Bounce(other.contacts[0].normal);
-            
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -62,16 +86,7 @@ public class Ball : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    private void OnBecameInvisible()
-    {
-        // BallSpawner.ballCounter--;
-        // print(BallSpawner.ballCounter+ " From Ball");
-        // HUDManager._instance.SetBallNumber(BallSpawner.ballCounter);
-        //
-        // Destroy(gameObject);
-    }
-
+    
     public void SetDirection(Vector2 direction)
     {
         var ballSpeed = rgb.velocity.magnitude;
@@ -88,15 +103,22 @@ public class Ball : MonoBehaviour
         rgb.velocity = direction * Mathf.Max(speed, ConfigurationUtils.BallImpulseForce * Time.deltaTime);
     }
 
+    private float _angle = 0;
     private IEnumerator StartBallMovement(float _delay)
     {
         yield return new WaitForSeconds(_delay);
         rgb.MoveRotation(20);
 
-        var rand = Random.Range(-1, 2);
-        var direction = new Vector2(rand, -1);
+        // var rand = Random.Range(-1, 2);
+        // var direction = new Vector2(rand, -1);
+        float angle = Random.Range(-Mathf.PI,0 );
 
-        rgb.velocity = direction * ConfigurationUtils.BallImpulseForce * Time.deltaTime;
+        _angle = angle;
+        
+        Vector2 direction = new Vector2(
+            Mathf.Cos(angle), Mathf.Sin(angle));
+
+        rgb.velocity = direction * speedMultiplier * ConfigurationUtils.BallImpulseForce * Time.deltaTime;
         timer.Duration = ConfigurationUtils.BallLifetime;
         timer.Run();
 
