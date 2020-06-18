@@ -146,3 +146,6 @@ MonoBehaviour:
   pointsPerBlock: 0
   color: {r: 0.3443396, g: 0.9863156, b: 1, a: 1}
   pickupEffect: 0
+  effectDuration: 0
+  freezeObject: {fileID: 3007976673807730754, guid: 99572d6ed5b2805409c012cea79a31d3,
+    type: 3}

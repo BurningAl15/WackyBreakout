@@ -128,6 +128,14 @@ public static class ConfigurationUtils
             return configurationData.BallsPerGame;
         }
     }
+
+    public static float FreezeDuration
+    {
+        get
+        {
+            return configurationData.FreezeDuration;
+        }
+    }
 #endregion
 
     

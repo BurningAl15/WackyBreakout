@@ -7,7 +7,7 @@ public class Block : MonoBehaviour
 {
     [SerializeField] protected int pointsPerBlock;
     
-    private void OnCollisionEnter2D(Collision2D coll)
+    protected virtual void OnCollisionEnter2D(Collision2D coll)
     {
         
         if (coll.gameObject.CompareTag("Ball"))
@@ -18,5 +18,4 @@ public class Block : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
 }

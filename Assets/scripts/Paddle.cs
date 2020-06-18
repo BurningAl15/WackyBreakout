@@ -12,18 +12,45 @@ public class Paddle : MonoBehaviour
     [SerializeField] private Rigidbody2D rgb;
     private float halfColliderWidth;
     private Vector2 skinSize;
- 
+
+    private static bool isFrozen = false;
+    private static float freezeDuration = 0;
+
+    private static Timer timer;
+    
+    // public static bool IsFrozen
+    // {
+    //     set => isFrozen = value;
+    // }
+
+    public static float FreezeDuration
+    {
+        set
+        {
+            isFrozen = true;
+            freezeDuration = value;
+            timer.Duration = freezeDuration;
+            timer.Run();            
+        }
+    }
+
     void Start()
     {
         rgb = GetComponent<Rigidbody2D>();
+        timer = gameObject.AddComponent<Timer>();
         skinSize = new Vector2(1f, .25f);
             halfColliderWidth = GetComponent<BoxCollider2D>().size.x;
+            
     }
 
     //This method is called 50 times per second
     void FixedUpdate()
     {
-        Move();
+        if (timer.Finished)
+            isFrozen = false;
+        
+        if(!isFrozen)
+            Move();
     }
 
     void Move()
@@ -51,31 +78,6 @@ public class Paddle : MonoBehaviour
         if (coll.gameObject.CompareTag("Ball"))
         {
             coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
-
-            // Vector2 contactPoint = coll.contacts[0].point;
-            // Vector2 center = collider.bounds.center;
-            //
-            // if (isTopCollision(contactPoint, center))
-            // {
-            //     return;
-            // }
-            // else
-            // {
-            //     // calculate new ball direction
-            //     // float ballOffsetFromPaddleCenter = transform.position.x -
-            //     //                                    coll.transform.position.x;
-            //     float ballOffsetFromPaddleCenter = contactPoint.x -
-            //                                        coll.transform.position.x;
-            //     float normalizedBallOffset = ballOffsetFromPaddleCenter /
-            //                                  halfColliderWidth;
-            //     float angleOffset = normalizedBallOffset * ConfigurationUtils.BounceAngleHalfRange;
-            //     float angle = Mathf.PI / 2 + angleOffset;
-            //     Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            //
-            //     // tell ball to set direction to new direction
-            //     Ball ballScript = coll.gameObject.GetComponent<Ball>();
-            //     ballScript.SetDirection(direction);
-            // }
         }
     }
 

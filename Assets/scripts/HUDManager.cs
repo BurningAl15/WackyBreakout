@@ -25,6 +25,14 @@ public class HUDManager : MonoBehaviour
         SetBallNumber(0);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MenuManager.GoToMenu(MenuName.Pause);
+        }
+    }
+
     public void SetScore(int _score)
     {
         score += _score;

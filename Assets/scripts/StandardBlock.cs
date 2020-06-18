@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickupBlock : Block
+public class StandardBlock : Block
 {
-    [SerializeField] Color color;
+    [SerializeField] List<Color> colors= new List<Color>();
     private SpriteRenderer spriteRenderer;
-
-    [SerializeField] private PickupEffect pickupEffect;
     
     void Start()
     {
-        pointsPerBlock = ConfigurationUtils.PickupBlockPoints;
+        pointsPerBlock = ConfigurationUtils.StandardBlockPoints;
             
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = color;
+        spriteRenderer.color = colors[Random.Range(0, colors.Count)];
     }
 }

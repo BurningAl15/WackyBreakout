@@ -11,25 +11,27 @@ public class ConfigurationData
 {
     #region Fields
 
-    const string ConfigurationDataFileName = "Configuration_Data.csv";
+    private const string ConfigurationDataFileName = "Configuration_Data.csv";
 
     // configuration data
-    static float paddleMoveUnitsPerSecond = 10;
-    static float ballImpulseForce = 200;
-    static float ballLifetime = 10;
-    static float minBallSpawnTime = 5;
-    static float maxBallSpawnTime = 10;
-    static int standardBlockPoints = 10;
-    static int bonusBlockPoints = 20;
-    static int pickupBlockPoints = 30;
+    private static float paddleMoveUnitsPerSecond = 10;
+    private static float ballImpulseForce = 200;
+    private static float ballLifetime = 10;
+    private static float minBallSpawnTime = 5;
+    private static float maxBallSpawnTime = 10;
+    private static int standardBlockPoints = 10;
+    private static int bonusBlockPoints = 20;
+    private static int pickupBlockPoints = 30;
 
     private static float standardProbabilities = .25f;
     private static float bonusProbabilities = .5f;
     private static float freezeProbabilities = .75f;
     private static float speedUpProbabilities = 1f;
 
-    static int ballsPerGame = 30;
+    private static int ballsPerGame = 30;
 
+    private static float freezeDuration = 1f;
+    
     #endregion
 
     #region Properties
@@ -52,40 +54,19 @@ public class ConfigurationData
         get { return ballImpulseForce; }
     }
 
-    public float BallLifetime
-    {
-        get => ballLifetime;
-    }
+    public float BallLifetime=> ballLifetime;
+  
+    public float MinBallSpawnTime=> minBallSpawnTime;
 
-    public float MinBallSpawnTime
-    {
-        get => minBallSpawnTime;
-    }
+    public float MaxBallSpawnTime=> maxBallSpawnTime;
 
-    public float MaxBallSpawnTime
-    {
-        get => maxBallSpawnTime;
-    }
+    public int StandardBlockPoints => standardBlockPoints;
 
-    public int StandardBlockPoints
-    {
-        get => standardBlockPoints;
-    }
+    public int BonusBlockPoints => bonusBlockPoints;
 
-    public int BonusBlockPoints
-    {
-        get => bonusBlockPoints;
-    }
-
-    public int PickupsBlockPoints
-    {
-        get => pickupBlockPoints;
-    }
-
-    public float StandardProbabilities
-    {
-        get => standardProbabilities;
-    }
+    public int PickupsBlockPoints => pickupBlockPoints;
+    
+    public float StandardProbabilities => standardProbabilities;
 
     public float BonusProbabilities => bonusProbabilities;
 
@@ -94,6 +75,8 @@ public class ConfigurationData
     public float SpeedUpProbabilities => speedUpProbabilities;
 
     public int BallsPerGame => ballsPerGame;
+
+    public float FreezeDuration => freezeDuration;
 
     #endregion
 
@@ -158,6 +141,7 @@ public class ConfigurationData
         freezeProbabilities = float.Parse(values[10]);
         speedUpProbabilities = float.Parse(values[11]);
         ballsPerGame = int.Parse(values[12]);
+        freezeDuration = float.Parse(values[13]);
     }
 
     #endregion
