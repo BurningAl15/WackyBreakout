@@ -19,9 +19,8 @@ public class LevelBuilder : MonoBehaviour
     void Start()
     {
         Instantiate(paddle);
-        screenHeight = (ScreenUtils.ScreenTop + ScreenUtils.ScreenBottom) / 5;
-        float blockAmountInWidth = 6;
-        
+        screenHeight = (ScreenUtils.ScreenTop + ScreenUtils.ScreenBottom) / 3;
+        float blockAmountInWidth = 8;
         
         for (float i = 0; i < blockAmountInWidth; i++)
         {
@@ -34,11 +33,6 @@ public class LevelBuilder : MonoBehaviour
                     (i) / (blockAmountInWidth-1)),  j* (screenHeight+offsetX*2)), Quaternion.identity);
             }
         }
-    }
-
-    void Update()
-    {
-        
     }
 
     GameObject RandomizeProbabilities()

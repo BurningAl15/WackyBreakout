@@ -9,7 +9,6 @@ public class Block : MonoBehaviour
     
     protected virtual void OnCollisionEnter2D(Collision2D coll)
     {
-        
         if (coll.gameObject.CompareTag("Ball"))
         {
             coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);

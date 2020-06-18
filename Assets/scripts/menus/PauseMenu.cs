@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Pauses and unpauses the game. Listens for the OnClick 
@@ -26,7 +27,19 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
         Destroy(gameObject);
     }
+    
+    public void HandlePlayButtonOnClickEvent()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("gameplay");
+    }
 
+    public void Handle_QuitButtonOnClickEvent()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainMenu");
+    }
+    
     /// <summary>
     /// Handles the on click event from the Quit button
     /// </summary>

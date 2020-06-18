@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5271961360722107711}
   - component: {fileID: 5271961360722107710}
   - component: {fileID: 5271961360722107709}
+  - component: {fileID: 5396179014995074402}
   m_Layer: 0
   m_Name: Paddle
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5271961360722107706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.26, z: 0}
+  m_LocalPosition: {x: 0, y: -5.55, z: 0}
   m_LocalScale: {x: 2, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -144,3 +145,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!68 &5396179014995074402
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271961360722107706}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.53}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.5, y: 0}
+  - {x: -0.43763527, y: -0.052026987}
+  - {x: -0.35849085, y: 0.022666693}
+  - {x: -0.12504445, y: -0.033175707}
+  - {x: 0.12875251, y: -0.025806665}
+  - {x: 0.34435013, y: 0.008415937}
+  - {x: 0.4126203, y: -0.04913068}
+  - {x: 0.5, y: -0.010917902}

@@ -36,6 +36,7 @@ public class HUDManager : MonoBehaviour
     public void SetScore(int _score)
     {
         score += _score;
+        PlayerPrefs.SetInt("Score", score);
         scoreText.text = "Score: " + score;
     }
 
@@ -47,6 +48,9 @@ public class HUDManager : MonoBehaviour
     public void SetBallsPerGame()
     {
         ballsPerGame--;
+        if(ballsPerGame<=0)
+            MenuManager.GoToMenu(MenuName.EndGame);
+
         ballsPerGameText.text = "Balls in Game: " + ballsPerGame;
     }
 }

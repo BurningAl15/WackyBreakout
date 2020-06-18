@@ -8,5 +8,6 @@ using UnityEngine;
 public enum MenuName
 {
     Main,
-    Pause
+    Pause,
+    EndGame
 }
