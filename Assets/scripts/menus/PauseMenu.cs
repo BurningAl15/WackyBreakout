@@ -24,18 +24,21 @@ public class PauseMenu : MonoBehaviour
     public void HandleResumeButtonOnClickEvent()
     {
         // unpause game and destroy menu
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         Destroy(gameObject);
     }
     
     public void HandlePlayButtonOnClickEvent()
     {
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         SceneManager.LoadScene("gameplay");
     }
 
     public void Handle_QuitButtonOnClickEvent()
     {
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
@@ -46,6 +49,7 @@ public class PauseMenu : MonoBehaviour
     public void HandleQuitButtonOnClickEvent()
     {
         // unpause game, destroy menu, and go to main menu
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         Destroy(gameObject);
         MenuManager.GoToMenu(MenuName.Main);

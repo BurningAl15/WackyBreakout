@@ -54,6 +54,7 @@ public class BallSpawner : MonoBehaviour
         // {
         //     retrySpawn = false;
             Instantiate(prefabBall);
+            AudioManager.Play(AudioClipName.Spawn);
             ballCounter++;
             HUDManager._instance.SetBallsPerGame();
             HUDManager._instance.SetBallNumber(ballCounter);

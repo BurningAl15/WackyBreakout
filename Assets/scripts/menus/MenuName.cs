@@ -9,5 +9,6 @@ public enum MenuName
 {
     Main,
     Pause,
-    EndGame
+    EndGame,
+    YouWin
 }

@@ -13,7 +13,8 @@ public class Block : MonoBehaviour
         {
             coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
             HUDManager._instance.SetScore(pointsPerBlock);
-
+            AudioManager.Play(AudioClipName.HitSound);
+            LevelBuilder.blocksInGame--;
             Destroy(this.gameObject);
         }
     }

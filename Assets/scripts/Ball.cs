@@ -62,6 +62,8 @@ public class Ball : MonoBehaviour
             else if (timer.Finished)
             {
                 BallSpawner.ballCounter--;
+                AudioManager.Play(AudioClipName.DestroyObj);
+
                 HUDManager._instance.SetBallNumber(BallSpawner.ballCounter);
 
                 Destroy(gameObject);
@@ -72,8 +74,13 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(!other.gameObject.CompareTag("End"))
+        if (!other.gameObject.CompareTag("End"))
+        {
             Bounce(other.contacts[0].normal);
+            if(other.gameObject.CompareTag("Ball"))
+                AudioManager.Play(AudioClipName.BallHitBall);
+        }
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)

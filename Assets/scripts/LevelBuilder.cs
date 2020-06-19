@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevelBuilder : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class LevelBuilder : MonoBehaviour
 
     private float screenHeight;
     private float offsetX=.5f;
+
+    public static int blocksInGame = 0;
     
     void Start()
     {
@@ -31,7 +35,19 @@ public class LevelBuilder : MonoBehaviour
                 Instantiate(tempInstance, new Vector2(Mathf.Lerp(ScreenUtils.ScreenLeft + offsetX,
                     ScreenUtils.ScreenRight - offsetX,
                     (i) / (blockAmountInWidth-1)),  j* (screenHeight+offsetX*2)), Quaternion.identity);
+                blocksInGame++;
             }
+        }
+    }
+
+    private void Update()
+    {
+        // if(Input.GetKeyDown(KeyCode.Space))
+        //     blocksInGame--;
+        
+        if (blocksInGame <= 0)
+        {
+            MenuManager.GoToMenu(MenuName.YouWin);
         }
     }
 

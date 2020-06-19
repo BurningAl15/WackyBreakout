@@ -28,12 +28,14 @@ public class MainMenu : MonoBehaviour
 
     public void ToHelpMenu()
     {
+        AudioManager.Play(AudioClipName.Click);
         menu.SetActive(false);
         helpMenu.SetActive(true);
     }
     
     public void ReturnToMenu()
     {
+        AudioManager.Play(AudioClipName.Click);
         menu.SetActive(true);
         helpMenu.SetActive(false);
     }

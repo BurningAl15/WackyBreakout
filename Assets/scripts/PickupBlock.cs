@@ -81,12 +81,17 @@ public class PickupBlock : Block
             {
                 Instantiate(freezeObject, this.transform.position, Quaternion.identity);
                 freezerEvent.Invoke(effectDuration);
+                AudioManager.Play(AudioClipName.PickupFreeze);
+
             }
             else
             {
                 speedUpEvent.Invoke(2,effectDuration);
+                AudioManager.Play(AudioClipName.PickupSpeedUp);
+
             }
-            
+            LevelBuilder.blocksInGame--;
+
             Destroy(this.gameObject);
         }
     }

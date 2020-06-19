@@ -128,6 +128,7 @@ public class Paddle : MonoBehaviour
         
         if (coll.gameObject.CompareTag("Ball"))
         {
+            AudioManager.Play(AudioClipName.PaddleHit);
             coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
         }
     }

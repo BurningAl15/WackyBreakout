@@ -31,6 +31,12 @@ public static class MenuManager
                 // instantiate prefab
                 Object.Instantiate(Resources.Load("EndMenu"));
                 break;
+            
+            case MenuName.YouWin:
+
+                // instantiate prefab
+                Object.Instantiate(Resources.Load("YouWin"));
+                break;
         }
     }
 }
