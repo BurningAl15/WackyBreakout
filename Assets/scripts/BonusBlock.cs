@@ -8,11 +8,18 @@ public class BonusBlock : Block
     private SpriteRenderer spriteRenderer;
     
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         pointsPerBlock = ConfigurationUtils.BonusBlockPoints;
             
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = color;
     }
+
+    // protected override void OnCollisionEnter2D(Collision2D coll)
+    // {
+    //     // hudAddPoints.Invoke(this.pointsPerBlock);
+    //     base.OnCollisionEnter2D(coll);
+    // }
 }

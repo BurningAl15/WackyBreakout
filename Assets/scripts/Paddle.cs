@@ -56,7 +56,9 @@ public class Paddle : MonoBehaviour
         rgb = GetComponent<Rigidbody2D>();
         
         freezeTimer = gameObject.AddComponent<Timer>();
+        freezeTimer.AddTimerFinishedListener(FinishedFreeze);
         speedUpTimer = gameObject.AddComponent<Timer>();
+        speedUpTimer.AddTimerFinishedListener(FinishedSpeedUp);
         
         skinSize = new Vector2(1f, .25f);
             halfColliderWidth = GetComponent<BoxCollider2D>().size.x;
@@ -80,28 +82,38 @@ public class Paddle : MonoBehaviour
             }
         }
 
-        if (freezeTimer.Finished)
-        {
-            if (speedUpTimer.Duration > 0)
-            {
-                speedUpTimer.Run();
-            }
-            isFrozen = false;
-        }
-        if (speedUpTimer.Finished)
-        {
-            if (freezeTimer.Duration > 0)
-            {
-                freezeTimer.Run();
-            }
-            
-            speedMultiplier = 1;
-            Ball.SpeedUpDuration(1,0);
-            isSpeedUp = false;
-        }
+        // if (freezeTimer.Finished)
+        // {
+        //     FinishedFreeze();
+        // }
+        // if (speedUpTimer.Finished)
+        // {
+        //     FinishedSpeedUp();
+        // }
         
         if(!isFrozen)
             Move();
+    }
+
+    void FinishedFreeze()
+    {
+        if (speedUpTimer.Duration > 0)
+        {
+            speedUpTimer.Run();
+        }
+        isFrozen = false;
+    }
+
+    void FinishedSpeedUp()
+    {
+        if (freezeTimer.Duration > 0)
+        {
+            freezeTimer.Run();
+        }
+            
+        speedMultiplier = 1;
+        Ball.SpeedUpDuration(1,0);
+        isSpeedUp = false;
     }
 
     void Move()
@@ -129,7 +141,7 @@ public class Paddle : MonoBehaviour
         if (coll.gameObject.CompareTag("Ball"))
         {
             AudioManager.Play(AudioClipName.PaddleHit);
-            coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
+            // coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
         }
     }
 

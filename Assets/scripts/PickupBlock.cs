@@ -19,8 +19,9 @@ public class PickupBlock : Block
     
     
     
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         pointsPerBlock = ConfigurationUtils.PickupBlockPoints;
         if (pickupEffect == PickupEffect.Freezer)
             effectDuration = ConfigurationUtils.FreezeDuration;
@@ -60,6 +61,32 @@ public class PickupBlock : Block
             Ball.SpeedUpDuration(2,effectDuration);
         }
     }
+
+    protected override void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Ball"))
+        {
+            EventManager.AddPointsAddedListener(HUDManager._instance.AddPoints);
+            EventManager.AddPointsAddedInvoker(this);
+            coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
+            // HUDManager._instance.AddPoints(pointsPerBlock);
+            
+            if (pickupEffect == PickupEffect.Freezer)
+            {
+                Instantiate(freezeObject, this.transform.position, Quaternion.identity);
+                freezerEvent.Invoke(effectDuration);
+                AudioManager.Play(AudioClipName.PickupFreeze);
+            }
+            else
+            {
+                speedUpEvent.Invoke(2,effectDuration);
+                AudioManager.Play(AudioClipName.PickupSpeedUp);
+            }
+            LevelBuilder.blocksInGame--;
+            hudAddPoints.Invoke(this.pointsPerBlock);
+            Destroy(this.gameObject);
+        }
+    }
     
     public void AddFreezerEffectListener(UnityAction<float> handler)
     {
@@ -69,30 +96,5 @@ public class PickupBlock : Block
     public void AddSpeedUpEffectListener(UnityAction<int,float> handler)
     {
         speedUpEvent.AddListener(handler);
-    }
-
-    protected override void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (coll.gameObject.CompareTag("Ball"))
-        {
-            coll.gameObject.GetComponent<Ball>().Bounce(coll.contacts[0].normal);
-            HUDManager._instance.SetScore(pointsPerBlock);
-            if (pickupEffect == PickupEffect.Freezer)
-            {
-                Instantiate(freezeObject, this.transform.position, Quaternion.identity);
-                freezerEvent.Invoke(effectDuration);
-                AudioManager.Play(AudioClipName.PickupFreeze);
-
-            }
-            else
-            {
-                speedUpEvent.Invoke(2,effectDuration);
-                AudioManager.Play(AudioClipName.PickupSpeedUp);
-
-            }
-            LevelBuilder.blocksInGame--;
-
-            Destroy(this.gameObject);
-        }
     }
 }

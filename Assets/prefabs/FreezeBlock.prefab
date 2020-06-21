@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e0ee1a3baf58d44b17e4dbd3f6de00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 3
   pointsPerBlock: 0
   color: {r: 0.3443396, g: 0.9863156, b: 1, a: 1}
   pickupEffect: 0

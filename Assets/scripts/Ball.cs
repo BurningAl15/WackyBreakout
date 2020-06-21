@@ -23,21 +23,18 @@ public class Ball : MonoBehaviour
     private static Timer speedUpTimer;
 
     private static bool changeSpeed = false;
-    
-    public static void SpeedUpDuration(int _speedMultiplier,float _duration)
-    {
-        speedMultiplier = _speedMultiplier;
-        speedUpDuration = _duration;
-        changeSpeed = true;
-    }
+    private float moveSpeed;
+    private float _angle = 0;
+   
     
     private void Start()
     {
         timer = gameObject.AddComponent<Timer>();
-        rgb = GetComponent<Rigidbody2D>();
+        timer.AddTimerFinishedListener(FinishedBall);
 
+        rgb = GetComponent<Rigidbody2D>();
         speedUpTimer = gameObject.AddComponent<Timer>();
-        
+            
         if (currentCoroutine == null)
             currentCoroutine = StartCoroutine(StartBallMovement(1));
     }
@@ -48,10 +45,8 @@ public class Ball : MonoBehaviour
         {
             if (changeSpeed)
             {
-                Vector2 direction = new Vector2(
-                    Mathf.Cos(_angle), Mathf.Sin(_angle));
-
-                rgb.velocity = direction * speedMultiplier * ConfigurationUtils.BallImpulseForce * Time.deltaTime;
+                Vector2 direction = rgb.velocity.normalized;
+                rgb.velocity = direction * moveSpeed;
                 changeSpeed = false;
             }
             
@@ -59,19 +54,18 @@ public class Ball : MonoBehaviour
             {
                 lastFrameVelocity = rgb.velocity;
             }
-            else if (timer.Finished)
-            {
-                BallSpawner.ballCounter--;
-                AudioManager.Play(AudioClipName.DestroyObj);
-
-                HUDManager._instance.SetBallNumber(BallSpawner.ballCounter);
-
-                Destroy(gameObject);
-            }
         }
         
     }
 
+    void FinishedBall()
+    {
+        BallSpawner.ballCounter--;
+        AudioManager.Play(AudioClipName.DestroyObj);
+        HUDManager._instance.SetBallNumber(BallSpawner.ballCounter);
+        Destroy(gameObject);
+    }
+    
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (!other.gameObject.CompareTag("End"))
@@ -79,6 +73,15 @@ public class Ball : MonoBehaviour
             Bounce(other.contacts[0].normal);
             if(other.gameObject.CompareTag("Ball"))
                 AudioManager.Play(AudioClipName.BallHitBall);
+            if (other.gameObject.CompareTag("Player"))
+            {
+                var speed = lastFrameVelocity.magnitude;
+                rgb.velocity = (this.transform.position - other.transform.position).normalized* Mathf.Max(speed, moveSpeed) ;
+            }
+            else
+                Bounce(other.contacts[0].normal);
+            
+            // rgb.velocity = Vector3.Reflect(rgb.velocity, other.contacts[0].normal);
         }
         
     }
@@ -107,10 +110,17 @@ public class Ball : MonoBehaviour
         var direction = Vector3.Reflect(lastFrameVelocity.normalized, collisionNormal);
 
         // Debug.Log("Out Direction: " + direction);
-        rgb.velocity = direction * Mathf.Max(speed, ConfigurationUtils.BallImpulseForce * Time.deltaTime);
+        rgb.velocity = direction * Mathf.Max(speed, moveSpeed);
     }
 
-    private float _angle = 0;
+    
+    public static void SpeedUpDuration(int _speedMultiplier,float _duration)
+    {
+        speedMultiplier = _speedMultiplier;
+        speedUpDuration = _duration;
+        changeSpeed = true;
+    }
+    
     private IEnumerator StartBallMovement(float _delay)
     {
         yield return new WaitForSeconds(_delay);
@@ -124,8 +134,9 @@ public class Ball : MonoBehaviour
         
         Vector2 direction = new Vector2(
             Mathf.Cos(angle), Mathf.Sin(angle));
+        moveSpeed = speedMultiplier* ConfigurationUtils.BallImpulseForce * Time.fixedDeltaTime;
 
-        rgb.velocity = direction * speedMultiplier * ConfigurationUtils.BallImpulseForce * Time.deltaTime;
+        rgb.velocity = direction * moveSpeed;
         timer.Duration = ConfigurationUtils.BallLifetime;
         timer.Run();
 

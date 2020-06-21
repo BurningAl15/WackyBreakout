@@ -21,7 +21,8 @@ public class HUDManager : MonoBehaviour
             Destroy(this.gameObject);
 
         ballsPerGame = ConfigurationUtils.BallsPerGame;
-        SetScore(0);
+        PlayerPrefs.SetInt("Score", score);
+        scoreText.text = "Score: " + score;
         SetBallNumber(0);
     }
 
@@ -33,7 +34,7 @@ public class HUDManager : MonoBehaviour
         }
     }
 
-    public void SetScore(int _score)
+    public void AddPoints(int _score)
     {
         score += _score;
         PlayerPrefs.SetInt("Score", score);
@@ -45,12 +46,12 @@ public class HUDManager : MonoBehaviour
         ballNumberText.text = "Balls remaining: " + ballNumber;
     }
     
-    public void SetBallsPerGame()
+    public void ReduceBallsLeft()
     {
         ballsPerGame--;
         if(ballsPerGame<=0)
             MenuManager.GoToMenu(MenuName.EndGame);
 
-        ballsPerGameText.text = "Balls in Game: " + ballsPerGame;
+        ballsPerGameText.text = "Balls Left: " + ballsPerGame;
     }
 }

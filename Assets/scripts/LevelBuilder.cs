@@ -19,11 +19,12 @@ public class LevelBuilder : MonoBehaviour
     private float offsetX=.5f;
 
     public static int blocksInGame = 0;
-    
+    public static List<Block> blocks=new List<Block>();
+
     void Start()
     {
         Instantiate(paddle);
-        screenHeight = (ScreenUtils.ScreenTop + ScreenUtils.ScreenBottom) / 3;
+        screenHeight = (ScreenUtils.ScreenTop)- (6 * offsetX * 2);
         float blockAmountInWidth = 8;
         
         for (float i = 0; i < blockAmountInWidth; i++)
@@ -34,7 +35,7 @@ public class LevelBuilder : MonoBehaviour
                 // Instantiate(j<3? standardBlock: bonusBlock, new Vector2(Mathf.Lerp(ScreenUtils.ScreenLeft + offsetX,
                 Instantiate(tempInstance, new Vector2(Mathf.Lerp(ScreenUtils.ScreenLeft + offsetX,
                     ScreenUtils.ScreenRight - offsetX,
-                    (i) / (blockAmountInWidth-1)),  j* (screenHeight+offsetX*2)), Quaternion.identity);
+                    (i) / (blockAmountInWidth-1)),  screenHeight + (j*offsetX*2)), Quaternion.identity);
                 blocksInGame++;
             }
         }

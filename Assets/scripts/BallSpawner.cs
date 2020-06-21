@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class BallSpawner : MonoBehaviour
 {
-    [SerializeField] bool retrySpawn = false; 
     [SerializeField] Vector2 spawnLocationMin;
     [SerializeField] Vector2 spawnLocationMax;
     [SerializeField] private GameObject prefabBall;
@@ -14,25 +14,21 @@ public class BallSpawner : MonoBehaviour
     private Timer ballSpawnTimer;
     public static int ballCounter = 0;
 
+    private HudReduceBallsLeft reduceBallsLeft=new HudReduceBallsLeft();
     void Start()
     {
+        EventManager.AddReduceBallsLEftInvoker(this);
+        EventManager.AddReduceBallsLEftListener(HUDManager._instance.ReduceBallsLeft);
+
         ballSpawnTimer = gameObject.AddComponent<Timer>();
-        InitializeBallSpawn();   
-        
+        ballSpawnTimer.AddTimerFinishedListener(ResetTimer);
+
+        InitializeBallSpawn();
         ResetTimer();
     }
     
     void Update()
     {
-        // if (retrySpawn)
-        if (ballSpawnTimer.Finished)
-        {
-            // if (retrySpawn)
-            // {
-                ResetTimer();
-            // }
-        }
-        
         if(ballCounter < 1)
         {
             SpawnBall();
@@ -50,19 +46,13 @@ public class BallSpawner : MonoBehaviour
     void SpawnBall()
     {
         // make sure we don't spawn into a collision
-        // if (Physics2D.OverlapArea(spawnLocationMin, spawnLocationMax) == null)
-        // {
-        //     retrySpawn = false;
-            Instantiate(prefabBall);
-            AudioManager.Play(AudioClipName.Spawn);
-            ballCounter++;
-            HUDManager._instance.SetBallsPerGame();
-            HUDManager._instance.SetBallNumber(ballCounter);
-        // }
-        // else
-        // {
-        //     retrySpawn = true;
-        // }
+        Instantiate(prefabBall);
+        AudioManager.Play(AudioClipName.Spawn);
+        ballCounter++;
+        // HUDManager._instance.ReduceBallsLeft();
+        reduceBallsLeft.Invoke();
+
+        HUDManager._instance.SetBallNumber(ballCounter);
     }
     
     void InitializeBallSpawn()
@@ -94,11 +84,11 @@ public class BallSpawner : MonoBehaviour
         Destroy(tempBall);
     }
     
-    void Spawn_Ball(){
-        Instantiate(prefabBall);
-        ballCounter++;
+    public void AddReduceBallsLeftListener(UnityAction handler)
+    {
+        reduceBallsLeft.AddListener(handler);
     }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color=new Color(1,0,0,.5f);
